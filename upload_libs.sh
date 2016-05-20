@@ -1,7 +1,12 @@
 #!/bin/sh
 #
-BIOSIGNALML_VERSION=0.8
-TYPEDOBJECT_VERSION=1.1
+BIOSIGNALML_MAJOR_VERSION=0
+BIOSIGNALML_MINOR_VERSION=8
+BIOSIGNALML_FULL_VERSION=0.8
+
+TYPEDOBJECT_MAJOR_VERSION=1
+TYPEDOBJECT_MINOR_VERSION=1
+TYPEDOBJECT_FULL_VERSION=1.1
 #
 RETRIEVE='RETRIEVE_BINARY_FILE_FROM("http://biosignalml.org/binaries" ${RELATIVE_PROJECT_SOURCE_DIR}'
 #
@@ -23,21 +28,29 @@ rm -rf /tmp/upload
 mkdir -p /tmp/upload/release
 mkdir -p /tmp/upload/debug
 #
-cp /Users/dave/biosignalml/libbsml/win64/biosignalml.lib          /tmp/upload/release/biosignalml.$BIOSIGNALML_VERSION.lib
-cp /Users/dave/biosignalml/libbsml/win64/biosignalml.dll          /tmp/upload/release/biosignalml.$BIOSIGNALML_VERSION.dll
-cp /Users/dave/biosignalml/typedobject/win64/typedobject.lib 	  /tmp/upload/release/typedobject.$TYPEDOBJECT_VERSION.lib
-cp /Users/dave/biosignalml/typedobject/win64/typedobject.dll 	  /tmp/upload/release/typedobject.$TYPEDOBJECT_VERSION.dll
+cp /Users/dave/biosignalml/libbsml/build/win64/biosignalml.lib     /tmp/upload/release/
+cp /Users/dave/biosignalml/libbsml/build/win64/biosignalml.dll     /tmp/upload/release/
+cp /Users/dave/biosignalml/typedobject/build/win64/typedobject.lib /tmp/upload/release/
+cp /Users/dave/biosignalml/typedobject/build/win64/typedobject.dll /tmp/upload/release/
 #
-cp /Users/dave/biosignalml/libbsml/win64d/biosignalml_d.lib       /tmp/upload/debug/biosignalml.$BIOSIGNALML_VERSION.lib
-cp /Users/dave/biosignalml/libbsml/win64d/biosignalml_d.dll       /tmp/upload/debug/biosignalml.$BIOSIGNALML_VERSION.dll
-cp /Users/dave/biosignalml/typedobject/win64d/typedobject_d.lib   /tmp/upload/debug/typedobject.$TYPEDOBJECT_VERSION.lib
-cp /Users/dave/biosignalml/typedobject/win64d/typedobject_d.dll   /tmp/upload/debug/typedobject.$TYPEDOBJECT_VERSION.dll
+cp /Users/dave/biosignalml/libbsml/build/win64d/biosignalml.lib     /tmp/upload/debug/
+cp /Users/dave/biosignalml/libbsml/build/win64d/biosignalml.dll     /tmp/upload/debug/
+cp /Users/dave/biosignalml/typedobject/build/win64d/typedobject.lib /tmp/upload/debug/
+cp /Users/dave/biosignalml/typedobject/build/win64d/typedobject.dll /tmp/upload/debug/
 #
-cp /Users/dave/biosignalml/libbsml/osx/libbiosignalml.$BIOSIGNALML_VERSION.dylib     /tmp/upload/release
-cp /Users/dave/biosignalml/typedobject/osx/libtypedobject.$TYPEDOBJECT_VERSION.dylib /tmp/upload/release
+tar xzf /Users/dave/biosignalml/libbsml/build/osx/libBioSignalML-$BIOSIGNALML_FULL_VERSION-Darwin.tar.gz    \
+        -C /tmp/upload/release --strip-components 2                                                         \
+        libBioSignalML-$BIOSIGNALML_FULL_VERSION-Darwin/lib/libbiosignalml.$BIOSIGNALML_FULL_VERSION.dylib
+tar xzf /Users/dave/biosignalml/typedobject/build/osx/TypedObjectLib-$TYPEDOBJECT_FULL_VERSION-Darwin.tar.gz   \
+        -C /tmp/upload/release --strip-components 2                                                            \
+        TypedObjectLib-$TYPEDOBJECT_FULL_VERSION-Darwin/lib/libtypedobject.$TYPEDOBJECT_FULL_VERSION.dylib
 #
-cp /Users/dave/biosignalml/libbsml/ubuntu/libbiosignalml.so.$BIOSIGNALML_VERSION     /tmp/upload/release
-cp /Users/dave/biosignalml/typedobject/ubuntu/libtypedobject.so.$TYPEDOBJECT_VERSION /tmp/upload/release
+tar xzf /Users/dave/biosignalml/libbsml/build/ubuntu/libBioSignalML-$BIOSIGNALML_FULL_VERSION-Linux.tar.gz  \
+        -C /tmp/upload/release --strip-components 2                                                         \
+        libBioSignalML-$BIOSIGNALML_FULL_VERSION-Linux/lib/libbiosignalml.so.$BIOSIGNALML_FULL_VERSION
+tar xzf /Users/dave/biosignalml/typedobject/build/ubuntu/TypedObjectLib-$TYPEDOBJECT_FULL_VERSION-Linux.tar.gz \
+        -C /tmp/upload/release --strip-components 2                                                            \
+        TypedObjectLib-$TYPEDOBJECT_FULL_VERSION-Linux/lib/libtypedobject.so.$TYPEDOBJECT_FULL_VERSION
 #
 pushd /tmp/upload > /dev/null
 #
@@ -46,27 +59,27 @@ rm -f sha1.cmake
 cd ./release
 echo "IF(WIN32)" >> ../sha1.cmake
 echo "    IF(RELEASE_MODE)" >> ../sha1.cmake
-upload  biosignalml.$BIOSIGNALML_VERSION.dll windows/release/ biosignalml.\${BIOSIGNALML_VERSION}.dll
-upload  biosignalml.$BIOSIGNALML_VERSION.lib windows/release/ biosignalml.\${BIOSIGNALML_VERSION}.lib
-upload  typedobject.$TYPEDOBJECT_VERSION.dll windows/release/ typedobject.\${TYPEDOBJECT_VERSION}.dll
-upload  typedobject.$TYPEDOBJECT_VERSION.lib windows/release/ typedobject.\${TYPEDOBJECT_VERSION}.lib
+upload  biosignalml.dll windows/release/ biosignalml.dll
+upload  biosignalml.lib windows/release/ biosignalml.lib
+upload  typedobject.dll windows/release/ typedobject.dll
+upload  typedobject.lib windows/release/ typedobject.lib
 #
 cd ../debug
 echo "    ELSE()" >> ../sha1.cmake
-upload  biosignalml.$BIOSIGNALML_VERSION.dll windows/debug/ biosignalml.\${BIOSIGNALML_VERSION}.dll
-upload  biosignalml.$BIOSIGNALML_VERSION.lib windows/debug/ biosignalml.\${BIOSIGNALML_VERSION}.lib
-upload  typedobject.$TYPEDOBJECT_VERSION.dll windows/debug/ typedobject.\${TYPEDOBJECT_VERSION}.dll
-upload  typedobject.$TYPEDOBJECT_VERSION.lib windows/debug/ typedobject.\${TYPEDOBJECT_VERSION}.lib
+upload  biosignalml.dll windows/debug/ biosignalml.dll
+upload  biosignalml.lib windows/debug/ biosignalml.lib
+upload  typedobject.dll windows/debug/ typedobject.dll
+upload  typedobject.lib windows/debug/ typedobject.lib
 echo "    ENDIF()" >> ../sha1.cmake
 #
 cd ../release
 echo "ELSEIF(APPLE)" >> ../sha1.cmake
-upload  libbiosignalml.$BIOSIGNALML_VERSION.dylib osx/ libbiosignalml.\${BIOSIGNALML_VERSION}.dylib
-upload  libtypedobject.$TYPEDOBJECT_VERSION.dylib osx/ libtypedobject.\${TYPEDOBJECT_VERSION}.dylib
+upload  libbiosignalml.$BIOSIGNALML_FULL_VERSION.dylib osx/ libbiosignalml.\${BIOSIGNALML_MAJOR_VERSION}.dylib
+upload  libtypedobject.$TYPEDOBJECT_FULL_VERSION.dylib osx/ libtypedobject.\${TYPEDOBJECT_MAJOR_VERSION}.dylib
 #
 echo "ELSE()" >> ../sha1.cmake
-upload  libbiosignalml.so.$BIOSIGNALML_VERSION linux/ libbiosignalml.so.\${BIOSIGNALML_VERSION}
-upload  libtypedobject.so.$TYPEDOBJECT_VERSION linux/ libtypedobject.so.\${TYPEDOBJECT_VERSION}
+upload  libbiosignalml.so.$BIOSIGNALML_FULL_VERSION linux/ libbiosignalml.so.\${BIOSIGNALML_MAJOR_VERSION}
+upload  libtypedobject.so.$TYPEDOBJECT_FULL_VERSION linux/ libtypedobject.so.\${TYPEDOBJECT_MAJOR_VERSION}
 echo "ENDIF()" >> ../sha1.cmake
 #
 more ../sha1.cmake
